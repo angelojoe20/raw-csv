@@ -4,6 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simple Web App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h1 {
+      color: #333;
+    }
+    form, #fetchData {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #dataList {
+      list-style-type: none;
+      padding: 0;
+    }
+    #dataList li {
+      background: #fff;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 <body>
   <h1>Welcome to the Simple Web App</h1>
@@ -33,17 +90,31 @@
       dataList.innerHTML = "";
       data.forEach(item => {
         const li = document.createElement("li");
-        li.textContent = item.name;
+        li.textContent = `${item.name} - ${item.email} - ${item.hobbies}`;
         dataList.appendChild(li);
       });
     });
 
-    document.getElementById("userInfoForm").addEventListener("submit", (event) => {
+    document.getElementById("userInfoForm").addEventListener("submit", async (event) => {
       event.preventDefault();
       const name = document.getElementById("name").value;
       const email = document.getElementById("email").value;
       const hobbies = document.getElementById("hobbies").value;
-      console.log(`Name: ${name}, Email: ${email}, Hobbies: ${hobbies}`);
+
+      const response = await fetch("http://localhost:3000/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, hobbies })
+      });
+
+      if (response.ok) {
+        alert("Data submitted successfully!");
+        document.getElementById("userInfoForm").reset();
+      } else {
+        alert("Error submitting data");
+      }
     });
   </script>
 </body>
