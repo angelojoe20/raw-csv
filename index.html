@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Web App</title>
+</head>
+<body>
+  <h1>Welcome to the Simple Web App</h1>
+  
+  <form id="userInfoForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+    
+    <label for="hobbies">Hobbies:</label>
+    <input type="text" id="hobbies" name="hobbies" required><br><br>
+    
+    <button type="submit">Submit</button>
+  </form>
+  
+  <button id="fetchData">Fetch Data</button>
+  <ul id="dataList"></ul>
+
+  <script>
+    document.getElementById("fetchData").addEventListener("click", async () => {
+      const response = await fetch("http://localhost:3000/data");
+      const data = await response.json();
+
+      const dataList = document.getElementById("dataList");
+      dataList.innerHTML = "";
+      data.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.name;
+        dataList.appendChild(li);
+      });
+    });
+
+    document.getElementById("userInfoForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const hobbies = document.getElementById("hobbies").value;
+      console.log(`Name: ${name}, Email: ${email}, Hobbies: ${hobbies}`);
+    });
+  </script>
+</body>
+</html>
